@@ -11,12 +11,22 @@ const bot = new Client({
         IntentsBitField.Flags.MessageContent
     ]
 });
+const router = require('./src/router/mainRoutes')
+const prefix = "+"
 
 //////////////////////////////////////////////////////
 // SETUP ENVIRONMENT
 //////////////////////////////////////////////////////
-bot.on('ready', () => {
-    console.log("Vibes is on");
+bot.on('messageCreate', (message) => {
+    console.log(message.content);
+    if(message.content.startsWith(prefix)){
+        let args = message.content.slice(prefix.length).trim().split(/ +/g); //args is the inputs after the cmd
+        router(bot, message, args);
+    }
+});
+
+bot.on('ready', (c) => {
+    console.log(`${c.user.tag} is up and running`);
 })
 
 //////////////////////////////////////////////////////
